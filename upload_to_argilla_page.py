@@ -347,16 +347,16 @@ def display_upload_to_argilla_page():
                 questions=label_questions,
                 metadata=metadata_properties,
             )
-             # Check if dataset already exists in workspace
-            workspace = client.workspaces(workspace_name)
-            datasets = [dataset.name for dataset in workspace.datasets]
-
+           
             # First check if workspace exists
             workspaces = [workspace.name for workspace in client.workspaces]
             if workspace_name not in workspaces:
                 st.error(f"A workspace with the name '{workspace_name}' does not exist. Available workspaces are: {workspaces}")
                 return
                 
+            # Check if dataset already exists in workspace
+            workspace = client.workspaces(workspace_name)
+            datasets = [dataset.name for dataset in workspace.datasets]
             if dataset_name in datasets:
                 st.error(f"A dataset with the name '{dataset_name}' already exists in workspace '{workspace_name}'. Please choose a different name.")
                 return
