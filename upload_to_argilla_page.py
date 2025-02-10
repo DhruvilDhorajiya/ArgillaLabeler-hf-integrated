@@ -6,6 +6,8 @@ from labeling_page import format_value
 from datasets import load_dataset
 from tqdm import tqdm
 import requests
+from config import LOCAL_BATCH_SIZE, STREAMING_BATCH_SIZE
+from argilla._api._client import ArgillaCredentialsError
 
 def convert_to_string(value):
     """Convert complex data types to Argilla-compatible format"""
