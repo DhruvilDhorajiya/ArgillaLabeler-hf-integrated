@@ -350,6 +350,13 @@ def display_upload_to_argilla_page():
              # Check if dataset already exists in workspace
             workspace = client.workspaces(workspace_name)
             datasets = [dataset.name for dataset in workspace.datasets]
+
+            # First check if workspace exists
+            workspaces = [workspace.name for workspace in client.workspaces]
+            if workspace_name not in workspaces:
+                st.error(f"A workspace with the name '{workspace_name}' does not exist. Available workspaces are: {workspaces}")
+                return
+                
             if dataset_name in datasets:
                 st.error(f"A dataset with the name '{dataset_name}' already exists in workspace '{workspace_name}'. Please choose a different name.")
                 return
@@ -365,19 +372,6 @@ def display_upload_to_argilla_page():
                 upload_huggingface_dataset(dataset_for_argilla, field_cols, metadata_columns, st.session_state)
             else:
                 upload_local_dataset(dataset_for_argilla, dataset, field_cols, metadata_columns, json_data)
-
-            # First check if workspace exists
-            workspaces = [workspace.name for workspace in client.workspaces]
-            if workspace_name not in workspaces:
-                st.error(f"A workspace with the name '{workspace_name}' does not exist. Available workspaces are: {workspaces}")
-                return
-
-            # Then get workspace and check datasets
-            workspace = client.workspaces(workspace_name)
-            datasets = [dataset.name for dataset in workspace.datasets]
-            if dataset_name in datasets:
-                st.error(f"A dataset with the name '{dataset_name}' already exists in workspace '{workspace_name}'. Please choose a different name.")
-                return
         
         except ArgillaCredentialsError:
                 st.error("❌ Invalid credentials: Invalid api_key and/or api_url.")
